@@ -1,21 +1,35 @@
 # kolide-timeline
 
-Turn Kolide pipeline logs into a timeline - experimental
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+
+Use Kolide pipeline logs as a timeline source for incident response. This includes query timestamps as well as any timestamps returned by queries.
+
+## Requirements
+
+* Go v1.20 or newer
+
+## Installation
+
+```shell
+go install github.com/chainguard-dev/kolide-timeline/cmd/kolide-timeline@latest
+go install github.com/chainguard-dev/kolide-timeline/cmd/copy-from-gs@latest
+```
 
 ## Usage
 
-Download logs from Google Cloud Storage for a specific Kolide device:
+kolide-timeline operates on locally download files:
 
 ```
-go run ./cmd/copy-from-gs/main.go \
+kolide-timeline </path/to/device/logs>
+```
+
+If your Kolide pipeline logs are stored in Google Cloud Storage, there is a tool to simplify downloading logs for a single device:
+
+```
+copy-from-gs \
   --bucket chainguard-kolide-logs \
-  --prefix kolide/results/incident_response \
+  --prefix kolide/results \
   --device-id=183909 \
   --max-age=72h            
 ```
 
-Turn those logs into a timeline (CSV format):
-
-```
-go run ./cmd/kolide-timeline/main.go kolide/
-```
