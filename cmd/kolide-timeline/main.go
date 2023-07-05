@@ -74,6 +74,7 @@ func readFile(path string) (*OutFile, error) {
 
 type Event struct {
 	Timestamp int64
+	UTC       string
 	Name      string
 	Relation  string
 	Line      string
@@ -148,6 +149,10 @@ func main() {
 	sort.Slice(evs, func(i, j int) bool {
 		return evs[i].Timestamp < evs[j].Timestamp
 	})
+
+	for _, e := range evs {
+		e.UTC = time.Unix(e.Timestamp, 0).Format(time.UnixDate)
+	}
 
 	if err = gocsv.MarshalFile(&evs, os.Stdout); err != nil {
 		klog.Fatalf("csv: %v", err)
